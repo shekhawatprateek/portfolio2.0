@@ -7,14 +7,14 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'], // We will add these later
+      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'Prateek Singh | Systems Architect',
         short_name: 'Prateek',
         description: 'Portfolio of Prateek Singh, MERN Stack Developer & Architect.',
         theme_color: '#0a0a0a',
         background_color: '#0a0a0a',
-        display: 'standalone', // This hides the browser UI when installed
+        display: 'standalone',
         icons: [
           {
             src: 'pwa-192x192.png',
@@ -27,6 +27,10 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      // ADD THIS NEW BLOCK RIGHT HERE:
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5000000 // Increases the limit to 5MB
       }
     })
   ]
