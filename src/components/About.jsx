@@ -32,6 +32,7 @@ const About = () => {
 
   return (
     <section 
+     id="about"
       ref={sectionRef}
       style={{
         minHeight: '100vh',

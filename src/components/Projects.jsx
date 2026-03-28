@@ -55,6 +55,7 @@ const Projects = () => {
 
   return (
     <section 
+      id="projects"
       ref={containerRef} 
       style={{ 
         height: '100vh', 

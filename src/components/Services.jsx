@@ -50,6 +50,7 @@ const Services = () => {
 
   return (
     <section 
+      id="services"
       ref={sectionRef}
       style={{
         minHeight: '100vh',
