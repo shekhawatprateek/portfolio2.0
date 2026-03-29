@@ -29,7 +29,6 @@ const certifications = [
   },
 ];
 
-// COMPONENT: The Interactive Counting Stat Box
 const AnimatedStat = ({ target, suffix, label, isLast }) => {
   const numberRef = useRef(null);
   const boxRef = useRef(null);
@@ -113,6 +112,7 @@ const About = () => {
           duration: 0.8,
           stagger: 0.2,
           ease: "power3.out",
+          force3D: true, // Forces GPU rendering to stop flickering
           scrollTrigger: { trigger: ".cert-grid", start: "top 85%" },
         },
       );
@@ -182,11 +182,42 @@ const About = () => {
           .stat-label { font-size: 0.7rem; color: #888888; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; position: relative; z-index: 1; }
 
           .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
-          .cert-card { background-color: #050505; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+          .cert-card { 
+            background-color: #050505; 
+            border: 1px solid rgba(255, 255, 255, 0.08); 
+            border-radius: 16px; 
+            overflow: hidden; 
+            text-decoration: none; 
+            display: flex; 
+            flex-direction: column; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+          }
           .cert-card:hover { border-color: #3496F7; transform: translateY(-6px); }
-          .cert-image-wrapper { width: 100%; height: 160px; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-          .cert-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-          .cert-card:hover .cert-img { transform: scale(1.05); }
+          
+          /* THE FIX: Placeholder background and hidden overflow */
+          .cert-image-wrapper { 
+            width: 100%; 
+            height: 160px; 
+            overflow: hidden; 
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05); 
+            background-color: #111111; 
+            position: relative;
+          }
+          
+          /* THE FIX: Smooth opacity transition and hardware acceleration */
+          .cert-img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0; /* Hidden until loaded */
+            transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0); /* Forces GPU layer */
+          }
+          
+          .cert-card:hover .cert-img { transform: scale(1.05) translateZ(0); }
 
           @media (max-width: 900px) {
             .about-top-row { flex-direction: column; gap: 40px !important; }
@@ -257,7 +288,6 @@ const About = () => {
                 fontSize: "clamp(2.5rem, 5vw, 4rem)",
                 fontWeight: "900",
                 lineHeight: "1.1",
-                // letterSpacing: "0.02em",
                 marginBottom: "20px",
                 color: "#ffffff",
               }}
@@ -402,6 +432,8 @@ const About = () => {
                     alt={cert.title}
                     className="cert-img"
                     loading="lazy"
+                    /* THE FIX: Fades the image in smoothly ONLY when fully loaded */
+                    onLoad={(e) => (e.target.style.opacity = 1)}
                   />
                 </div>
                 <div className="cert-content" style={{ padding: "20px" }}>
