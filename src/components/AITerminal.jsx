@@ -46,10 +46,13 @@ const AITerminal = () => {
   const [messages, setMessages] = useState([
     {
       role: "ai",
-      text: "System initialized. I am Cadbury. Ask me anything about Master Prateek's tech stack, his experience, or what he's building right now.",
+      text: "Hi, I am Cadbury. Ask me anything about Master Prateek's tech stack, his experience, or what he's building right now.",
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
+
+  // Set the live backend URL here
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://portfolio-backend-xbtz.onrender.com";
 
   useGSAP(
     () => {
@@ -102,7 +105,8 @@ const AITerminal = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch("http://localhost:8000/ask-prateek-ai", {
+      // THE FIX: Pointing the fetch call to your live Render backend
+      const response = await fetch(`${BACKEND_URL}/ask-prateek-ai`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg }),
@@ -144,10 +148,7 @@ const AITerminal = () => {
       </style>
 
       {/* THE NEW HEADING */}
-      <div
-        // ref={addToRefs} // Optional: if you want it to fade in with GSAP, otherwise remove this ref
-        style={{ textAlign: "center", marginBottom: "40px" }}
-      >
+      <div style={{ textAlign: "center", marginBottom: "40px" }}>
         <h2
           style={{
             fontSize: "clamp(2rem, 5vw, 3rem)",
@@ -289,7 +290,7 @@ const AITerminal = () => {
               <span style={{ color: "#3496F7", marginRight: "8px" }}>
                 {">"}
               </span>
-              AI is analyzing request
+              Cadbury is analyzing request
               <span
                 className="dot-1"
                 style={{ fontSize: "1.2rem", lineHeight: "0" }}
