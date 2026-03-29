@@ -14,7 +14,7 @@ const projects = [
     year: "2024",
     accent: "#10b981", // Emerald Green
     image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop", 
-    link: "https://github.com/shekhawatprateek", 
+    link: "https://rideflow-frontend.vercel.app/", 
     linkType: "View Live Demo"
   },
   {
@@ -252,9 +252,9 @@ const Work = () => {
           marginBottom: '80px',
           textAlign: 'center',
           fontFamily: 'Clash Display',
-          letterSpacing: '-0.02em'
+          // letterSpacing: '-0.02em'
         }}>
-          SELECTED <span style={{ color: '#3496F7' }}>WORKS.</span>
+          THINGS I <span style={{ color: '#3496F7' }}>SHIPPED</span>
         </h2>
 
         <div className="cards-container">

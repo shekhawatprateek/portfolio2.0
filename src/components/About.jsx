@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -9,21 +9,24 @@ const certifications = [
   {
     title: "React - The Complete Guide (incl. Next.js, Redux)",
     issuer: "Udemy",
-    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.jpg",
-    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.pdf"
+    image:
+      "https://udemy-certificate.s3.amazonaws.com/image/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.pdf",
   },
   {
     title: "NodeJS - The Complete Guide (MVC, REST APIs, GraphQL)",
     issuer: "Udemy",
-    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-4301ec81-2f06-4699-8363-e565b786f070.jpg",
-    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-4301ec81-2f06-4699-8363-e565b786f070.pdf"
+    image:
+      "https://udemy-certificate.s3.amazonaws.com/image/UC-4301ec81-2f06-4699-8363-e565b786f070.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-4301ec81-2f06-4699-8363-e565b786f070.pdf",
   },
   {
     title: "The Complete JavaScript Course 2025: Zero to Expert!",
     issuer: "Udemy",
-    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.jpg",
-    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.pdf"
-  }
+    image:
+      "https://udemy-certificate.s3.amazonaws.com/image/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.pdf",
+  },
 ];
 
 // COMPONENT: The Interactive Counting Stat Box
@@ -33,29 +36,36 @@ const AnimatedStat = ({ target, suffix, label, isLast }) => {
 
   useGSAP(() => {
     const counter = { val: 0 };
-    gsap.fromTo(counter, 
-      { val: 0 }, 
+    gsap.fromTo(
+      counter,
+      { val: 0 },
       {
         val: target,
         duration: 1.5,
         ease: "power3.out",
         scrollTrigger: {
           trigger: boxRef.current,
-          start: "top 95%", 
-          toggleActions: "play none none reverse" 
+          start: "top 95%",
+          toggleActions: "play none none reverse",
         },
         onUpdate: () => {
           if (numberRef.current) {
             numberRef.current.innerText = Math.floor(counter.val) + suffix;
           }
-        }
-      }
+        },
+      },
     );
   }, []);
 
   return (
-    <div ref={boxRef} className={`stat-box ${isLast ? 'last-stat' : ''}`}>
-      <span ref={numberRef} className="stat-number" style={{ color: '#3496F7' }}>0{suffix}</span>
+    <div ref={boxRef} className={`stat-box ${isLast ? "last-stat" : ""}`}>
+      <span
+        ref={numberRef}
+        className="stat-number"
+        style={{ color: "#3496F7" }}
+      >
+        0{suffix}
+      </span>
       <span className="stat-label">{label}</span>
     </div>
   );
@@ -67,38 +77,68 @@ const About = () => {
   const textRefs = useRef([]);
   const certRefs = useRef([]);
 
-  useGSAP(() => {
-    gsap.fromTo(leftRef.current,
-      { x: -50, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: containerRef.current, start: "top 65%" } }
-    );
+  useGSAP(
+    () => {
+      gsap.fromTo(
+        leftRef.current,
+        { x: -50, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1.2,
+          ease: "power3.out",
+          scrollTrigger: { trigger: containerRef.current, start: "top 65%" },
+        },
+      );
 
-    gsap.fromTo(textRefs.current, 
-      { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: containerRef.current, start: "top 65%" } }
-    );
+      gsap.fromTo(
+        textRefs.current,
+        { y: 40, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: { trigger: containerRef.current, start: "top 65%" },
+        },
+      );
 
-    gsap.fromTo(certRefs.current,
-      { y: 50, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power3.out", scrollTrigger: { trigger: ".cert-grid", start: "top 85%" } }
-    );
-  }, { scope: containerRef });
+      gsap.fromTo(
+        certRefs.current,
+        { y: 50, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.8,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: { trigger: ".cert-grid", start: "top 85%" },
+        },
+      );
+    },
+    { scope: containerRef },
+  );
 
-  const addToRefs = (el) => { if (el && !textRefs.current.includes(el)) textRefs.current.push(el); };
-  const addCertToRefs = (el) => { if (el && !certRefs.current.includes(el)) certRefs.current.push(el); };
+  const addToRefs = (el) => {
+    if (el && !textRefs.current.includes(el)) textRefs.current.push(el);
+  };
+  const addCertToRefs = (el) => {
+    if (el && !certRefs.current.includes(el)) certRefs.current.push(el);
+  };
 
   return (
-    <section 
-      id="about" 
+    <section
+      id="about"
       ref={containerRef}
       style={{
-        backgroundColor: '#000000',
-        padding: 'clamp(80px, 10vw, 150px) 20px',
-        color: '#ffffff',
-        display: 'flex',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden'
+        backgroundColor: "#000000",
+        padding: "clamp(80px, 10vw, 150px) 20px",
+        color: "#ffffff",
+        display: "flex",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
       }}
     >
       <style>
@@ -158,68 +198,232 @@ const About = () => {
         `}
       </style>
 
-      <div style={{ position: 'absolute', top: '0%', right: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(52,150,247,0.03) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none', zIndex: 0 }}/>
+      <div
+        style={{
+          position: "absolute",
+          top: "0%",
+          right: "-10%",
+          width: "600px",
+          height: "600px",
+          background:
+            "radial-gradient(circle, rgba(52,150,247,0.03) 0%, rgba(0,0,0,0) 70%)",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
 
-      <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', flexDirection: 'column', gap: '60px', position: 'relative', zIndex: 1 }}>
-        
-        <div className="about-top-row" style={{ display: 'flex', gap: '60px' }}>
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "1200px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "60px",
+          position: "relative",
+          zIndex: 1,
+        }}
+      >
+        <div className="about-top-row" style={{ display: "flex", gap: "60px" }}>
           {/* LEFT COLUMN */}
-          <div ref={leftRef} style={{ flex: '1 1 45%' }}>
+          <div ref={leftRef} style={{ flex: "1 1 45%" }}>
             <div className="about-image-wrapper">
-              <lottie-player src="/developer.json" background="transparent" speed="1" style={{ width: '80%', height: '80%' }} loop autoplay></lottie-player>
+              <lottie-player
+                src="/developer.json"
+                background="transparent"
+                speed="1"
+                style={{ width: "80%", height: "80%" }}
+                loop
+                autoplay
+              ></lottie-player>
               <div className="glass-badge badge-top">📍 Gurugram, India</div>
-              <div className="glass-badge badge-bottom"><div className="status-dot"></div>Elite Engineer</div>
+              <div className="glass-badge badge-bottom">
+                <div className="status-dot"></div>Available for Opportunities
+              </div>
             </div>
           </div>
 
           {/* RIGHT COLUMN */}
-          <div style={{ flex: '1 1 55%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h2 ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '900', lineHeight: '1.1', letterSpacing: '-0.02em', marginBottom: '20px', color: '#ffffff' }}>
-              YOUR SEARCH IS <span style={{ color: '#3496F7' }}>OVER.</span>
+          <div
+            style={{
+              flex: "1 1 55%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+            }}
+          >
+            <h2
+              ref={addToRefs}
+              style={{
+                fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                fontWeight: "900",
+                lineHeight: "1.1",
+                // letterSpacing: "0.02em",
+                marginBottom: "20px",
+                color: "#ffffff",
+              }}
+            >
+              YOUR SEARCH IS <span style={{ color: "#3496F7" }}>OVER.</span>
             </h2>
 
-            <div ref={addToRefs} style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
-              <p style={{ fontSize: '1.2rem', color: '#e5e5e5', lineHeight: '1.6', fontWeight: '700' }}>
-                I don't just ship features; I engineer systems.
+            <div
+              ref={addToRefs}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "20px",
+                marginBottom: "40px",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: "1.2rem",
+                  color: "#e5e5e5",
+                  lineHeight: "1.6",
+                  fontWeight: "700",
+                }}
+              >
+                Some engineers ship features. I ship systems that{" "}
+                <span style={{ color: "#3496F7" }}>last.</span>
               </p>
-              <p style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7', fontWeight: '500' }}>
-                With over 3 years of deep-immersion experience in the MERN ecosystem, I specialize in transforming complex business logic into high-velocity, production-grade software. 
+              <p
+                style={{
+                  fontSize: "1.1rem",
+                  color: "#e5e5e5",
+                  lineHeight: "1.7",
+                  fontWeight: "500",
+                }}
+              >
+                3+ years of full-stack experience, zero tolerance for shortcuts,
+                and an obsession with getting it right.
               </p>
-              <p style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7', fontWeight: '500' }}>
-                From architecting distributed Node.js backends to crafting pixel-perfect interfaces, I bridge the gap between heavy-duty engineering and seamless user experience. No technical debt. No hand-holding. Just scalable, battle-tested code.
+              <p
+                style={{
+                  fontSize: "1.1rem",
+                  color: "#e5e5e5",
+                  lineHeight: "1.7",
+                  fontWeight: "500",
+                }}
+              >
+                Stop searching —{" "}
+                <span style={{ color: "#3496F7" }}>you've found your guy.</span>
               </p>
             </div>
 
             <div ref={addToRefs} className="micro-stats-grid">
               <AnimatedStat target={3} suffix="+" label="Years MERN" />
               <AnimatedStat target={3} suffix="" label="Certifications" />
-              <AnimatedStat target={100} suffix="%" label="Ownership" isLast={true} />
+              <AnimatedStat
+                target={100}
+                suffix="%"
+                label="Ownership"
+                isLast={true}
+              />
             </div>
 
-            <a ref={addToRefs} href="/resume.pdf" target="_blank" rel="noopener noreferrer" 
-               style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '16px 36px', backgroundColor: '#ffffff', color: '#000000', fontWeight: '800', borderRadius: '50px', textDecoration: 'none', fontSize: '1rem', alignSelf: 'flex-start' }}>
+            <a
+              ref={addToRefs}
+              href="/resume.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "12px",
+                padding: "16px 36px",
+                backgroundColor: "#ffffff",
+                color: "#000000",
+                fontWeight: "800",
+                borderRadius: "50px",
+                textDecoration: "none",
+                fontSize: "1rem",
+                alignSelf: "flex-start",
+              }}
+            >
               View Full Resume
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+              >
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
             </a>
           </div>
         </div>
 
         {/* CERTIFICATIONS */}
-        <div style={{ width: '100%' }}>
-          <h3 ref={addCertToRefs} style={{ fontSize: '1rem', fontWeight: '800', color: '#ffffff', marginBottom: '25px', letterSpacing: '1px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3496F7" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        <div style={{ width: "100%" }}>
+          <h3
+            ref={addCertToRefs}
+            style={{
+              fontSize: "1rem",
+              fontWeight: "800",
+              color: "#ffffff",
+              marginBottom: "25px",
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#3496F7"
+              strokeWidth="2.5"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
             Verified Credentials
           </h3>
-          
+
           <div className="cert-grid">
             {certifications.map((cert, index) => (
-              <a key={index} ref={addCertToRefs} href={cert.pdf} target="_blank" rel="noopener noreferrer" className="cert-card">
+              <a
+                key={index}
+                ref={addCertToRefs}
+                href={cert.pdf}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cert-card"
+              >
                 <div className="cert-image-wrapper">
-                  <img src={cert.image} alt={cert.title} className="cert-img" loading="lazy" />
+                  <img
+                    src={cert.image}
+                    alt={cert.title}
+                    className="cert-img"
+                    loading="lazy"
+                  />
                 </div>
-                <div className="cert-content" style={{ padding: '20px' }}>
-                  <span style={{ color: '#3496F7', fontSize: '0.75rem', fontWeight: '700' }}>{cert.issuer}</span>
-                  <h4 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', marginTop: '5px' }}>{cert.title}</h4>
+                <div className="cert-content" style={{ padding: "20px" }}>
+                  <span
+                    style={{
+                      color: "#3496F7",
+                      fontSize: "0.75rem",
+                      fontWeight: "700",
+                    }}
+                  >
+                    {cert.issuer}
+                  </span>
+                  <h4
+                    style={{
+                      color: "#ffffff",
+                      fontSize: "0.95rem",
+                      fontWeight: "700",
+                      marginTop: "5px",
+                    }}
+                  >
+                    {cert.title}
+                  </h4>
                 </div>
               </a>
             ))}

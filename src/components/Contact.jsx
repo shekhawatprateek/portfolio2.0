@@ -236,7 +236,7 @@ const Contact = () => {
             <span style={{ color: '#3496F7' }}>the next big thing together.</span>
           </h2>
           
-          <p ref={addToRefs} style={{ color: '#a3a3a3', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '40px', maxWidth: '400px' }}>
+          <p ref={addToRefs} style={{ color: '#ffffff', fontSize: '1.1rem', lineHeight: '1.6', marginBottom: '40px', maxWidth: '400px' }}>
             Whether you need a full-stack architect to scale your infrastructure or a developer to execute your MVP, I'm ready to talk code.
           </p>
 

@@ -221,10 +221,11 @@ const Hero = () => {
             fontWeight: "700",
             letterSpacing: "0.25em", // Increased for premium feel
             textAlign: "center",
-            textTransform: "uppercase"
+            textTransform: "uppercase",
+            color: "#ffffff"
           }}
         >
-          FULL STACK MERN DEVELOPER
+          FULL STACK ENGINEER
         </p>
       </div>
 
