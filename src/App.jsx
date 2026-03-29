@@ -9,6 +9,7 @@ import Projects from './components/Projects' // Make sure the filename matches!
 import Contact from './components/Contact'
 import AITerminal from './components/AITerminal'
 import PremiumEffects from './components/PremiumEffects';
+import Preloader from './components/Preloader';
 import 'lenis/dist/lenis.css'
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
   return (
     <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.1, duration: 1.5 }}>
       <main style={{ position: 'relative' }}>
+        <Preloader />
         <PremiumEffects /> {/* Drops in the global physics and texture */}
         <Navbar />
         <Hero />
