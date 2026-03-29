@@ -12,7 +12,7 @@ const projects = [
     description: "Engineering a high-concurrency ride-hailing system. Integrated real-time geospatial tracking via Google Maps API and low-latency driver-rider synchronization with Socket.io.",
     tech: ["React.js", "Node.js", "Socket.io", "MongoDB"],
     year: "2024",
-    accent: "#10b981", // Emerald Green
+    accent: "#10b981", 
     image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop", 
     link: "https://rideflow-frontend.vercel.app/", 
     linkType: "View Live Demo"
@@ -23,7 +23,7 @@ const projects = [
     description: "Architecting a high-fidelity streaming interface. Optimized for asynchronous data fetching and complex state management across thousands of dynamic media assets.",
     tech: ["React.js", "REST APIs", "Redux"],
     year: "2023",
-    accent: "#ef4444", // Cinematic Red
+    accent: "#ef4444", 
     image: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=1000&auto=format&fit=crop", 
     link: "https://shekhawatprateek.github.io/NetflixClone/",
     linkType: "View Live Demo"
@@ -34,7 +34,7 @@ const projects = [
     description: "A foundational build demonstrating early mastery of responsive design and CI/CD pipelines. Deployed with focus on load-time performance and cross-browser stability.",
     tech: ["JavaScript", "HTML5", "CSS3", "Netlify"],
     year: "2021",
-    accent: "#3496F7", // Tech Blue
+    accent: "#3496F7", 
     image: "./clickserve.png", 
     link: "https://clickserve.netlify.app/", 
     linkType: "View Live Demo"
@@ -51,13 +51,15 @@ const Work = () => {
       if (index === cards.length - 1) return;
 
       gsap.to(card, {
-        scale: 0.9, 
-        opacity: 0,
+        scale: 0.92, 
+        opacity: 0.4, 
+        filter: "blur(4px)", 
+        transformOrigin: "top center", 
         scrollTrigger: {
           trigger: cards[index + 1], 
-          start: "top 85%", 
-          end: "top 20%",
-          scrub: true,
+          start: "top 80%", 
+          end: "top 20%", 
+          scrub: true, 
         }
       });
     });
@@ -70,29 +72,32 @@ const Work = () => {
       style={{
         backgroundColor: '#000000',
         padding: 'clamp(60px, 10vw, 120px) 0',
-        paddingBottom: '20vh',
-        overflow: 'hidden'
+        paddingBottom: '30vh', 
       }}
     >
       <style>
         {`
+          .cards-container {
+            position: relative;
+          }
+
           .project-card {
             position: sticky;
-            top: 12%; 
+            top: 15%; 
             width: 92%;
             max-width: 1100px;
             height: auto;
             min-height: 550px;
-            margin: 0 auto 12vh auto;
+            margin: 0 auto 10vh auto; 
             border-radius: 32px;
             background-color: #080808;
             border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: row;
             overflow: hidden;
-            box-shadow: 0 -20px 60px rgba(0,0,0,0.9);
-            transform-origin: top center; 
+            box-shadow: 0 -20px 40px rgba(0,0,0,0.8); 
             box-sizing: border-box;
+            will-change: transform, opacity, filter; 
           }
 
           .card-content-left {
@@ -102,6 +107,7 @@ const Work = () => {
             flex-direction: column;
             justify-content: center;
             box-sizing: border-box;
+            z-index: 2; 
           }
 
           .card-visual-right {
@@ -125,18 +131,16 @@ const Work = () => {
             transform: scale(1.05);
           }
 
-          /* --- UPGRADED DESCRIPTION TYPOGRAPHY --- */
           .project-desc {
             font-family: 'Satoshi', sans-serif;
             font-size: 1.15rem;
             line-height: 1.75;
-            color: #c2c2c2; /* Crisp Silver */
-            font-weight: 500; /* Just enough weight to look sharp */
+            color: #c2c2c2; 
+            font-weight: 500; 
             margin-bottom: 35px;
-            letter-spacing: 0.02em; /* Editorial tracking */
+            letter-spacing: 0.02em; 
           }
 
-          /* --- UPGRADED PREMIUM TECH TAGS --- */
           .tech-tag {
             position: relative;
             padding: 8px 16px;
@@ -169,9 +173,7 @@ const Work = () => {
             color: #ffffff;
           }
 
-          .tech-tag:hover::before {
-            opacity: 0.8; 
-          }
+          .tech-tag:hover::before { opacity: 0.8; }
 
           .project-link-btn {
             display: flex;
@@ -190,6 +192,8 @@ const Work = () => {
             transition: all 0.3s ease;
             box-sizing: border-box;
             font-family: 'Satoshi', sans-serif;
+            pointer-events: auto !important; 
+            flex-shrink: 0; /* Prevents the button from squishing */
           }
 
           .project-link-btn:hover {
@@ -199,41 +203,53 @@ const Work = () => {
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
           }
 
-          /* MOBILE FIXES */
+          /* --- MOBILE ARCHITECTURE FIXES --- */
           @media (max-width: 850px) {
             .project-card {
               flex-direction: column; 
               width: 90%;
               min-height: auto;
-              top: 8%;
+              
+              /* THE FIX: dvh (dynamic viewport height) respects the browser's URL bar */
+              top: 8dvh; 
+              margin: 0 auto 5dvh auto; 
+              
+              /* Failsafe: Never let the card be taller than the actual visible screen */
+              max-height: 84dvh; 
             }
 
             .card-visual-right {
-              height: 220px;
+              /* Shrink the image so the text and button have more room */
+              height: 200px; 
               flex: none;
               width: 100%;
             }
 
             .card-content-left {
-              padding: 32px 24px;
+              /* Reduce padding to give the button breathing room */
+              padding: 24px 20px 24px 20px; 
               width: 100%;
-              flex: none;
+              flex: 1; /* Allows this container to take up remaining space */
               box-sizing: border-box;
+              
+              /* Failsafe 2: If the phone screen is TINY, allow internal scrolling instead of cutting off */
+              overflow-y: auto; 
             }
 
             .project-card h3 { 
-                font-size: 2.2rem !important; 
-                margin-bottom: 12px !important;
+                font-size: 2rem !important; 
+                margin-bottom: 10px !important;
             }
             
             .project-desc {
-                font-size: 1.05rem !important;
-                margin-bottom: 25px !important;
+                font-size: 1rem !important;
+                margin-bottom: 20px !important;
+                line-height: 1.5 !important;
             }
 
             .project-link-btn {
               width: 100%; 
-              margin-top: 24px;
+              margin-top: 20px;
             }
 
             .tech-tag {
@@ -252,7 +268,6 @@ const Work = () => {
           marginBottom: '80px',
           textAlign: 'center',
           fontFamily: 'Clash Display',
-          // letterSpacing: '-0.02em'
         }}>
           THINGS I <span style={{ color: '#3496F7' }}>SHIPPED</span>
         </h2>
@@ -276,7 +291,7 @@ const Work = () => {
 
               {/* CONTENT SECTION */}
               <div className="card-content-left">
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', alignItems: 'center' }}>
                   <span style={{ color: project.accent, fontWeight: '800', fontSize: '0.8rem', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                     {project.category}
                   </span>
@@ -285,16 +300,15 @@ const Work = () => {
                   </span>
                 </div>
 
-                <h3 style={{ color: '#ffffff', fontSize: '3rem', fontWeight: '900', marginBottom: '20px', lineHeight: '1', letterSpacing: '-0.03em', fontFamily: 'Clash Display' }}>
+                <h3 style={{ color: '#ffffff', fontSize: '3rem', fontWeight: '900', marginBottom: '15px', lineHeight: '1', letterSpacing: '-0.03em', fontFamily: 'Clash Display' }}>
                     {project.title}
                 </h3>
                 
-                {/* UPGRADED DESCRIPTION */}
                 <p className="project-desc">
                     {project.description}
                 </p>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                   {project.tech.map((t, i) => (
                     <span key={i} className="tech-tag">
                         {t}
