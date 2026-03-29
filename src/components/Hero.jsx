@@ -8,21 +8,18 @@ gsap.registerPlugin(ScrollTrigger);
 
 const Hero = () => {
   const containerRef = useRef(null);
-  const textContainerRef = useRef(null); // Used to explode the text on scroll
+  const textContainerRef = useRef(null); 
   const backgroundRef = useRef(null);
   
-  // Refs for the initial load animation
-  const badgeRef = useRef(null);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const scrollIndicatorRef = useRef(null);
 
   useGSAP(() => {
-    // 1. THE ENTRANCE ANIMATION (Runs when page loads)
     const loadTl = gsap.timeline();
     
     loadTl.fromTo(
-      [badgeRef.current, titleRef.current, subtitleRef.current, scrollIndicatorRef.current],
+      [titleRef.current, subtitleRef.current, scrollIndicatorRef.current],
       { y: 40, opacity: 0, filter: "blur(10px)" },
       {
         y: 0,
@@ -31,11 +28,26 @@ const Hero = () => {
         duration: 1.2,
         stagger: 0.15,
         ease: "power3.out",
-        delay: 0.2 // Gives the 3D canvas a split second to initialize
+        delay: 0.2 
       }
     );
 
-    // 2. THE SCROLL ANIMATION (Runs when user scrolls down)
+    const titleEl = titleRef.current;
+    const onMouseMove = (e) => {
+      const rect = titleEl.getBoundingClientRect();
+      const x = (e.clientX - rect.left - rect.width / 2) * 0.08; 
+      const y = (e.clientY - rect.top - rect.height / 2) * 0.08;
+      gsap.to(titleEl, { x, y, duration: 0.4, ease: "power3.out" });
+    };
+    const onMouseLeave = () => {
+      gsap.to(titleEl, { x: 0, y: 0, duration: 0.8, ease: "elastic.out(1, 0.3)" });
+    };
+
+    if (window.innerWidth > 768) {
+        titleEl.addEventListener("mousemove", onMouseMove);
+        titleEl.addEventListener("mouseleave", onMouseLeave);
+    }
+
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -46,29 +58,28 @@ const Hero = () => {
       },
     });
 
-    scrollTl.to(
-      textContainerRef.current,
-      {
-        scale: 8,
-        opacity: 0,
-        filter: "blur(20px)",
-        ease: "power2.in",
-        duration: 1,
-      },
-      0
-    ); 
+    scrollTl.to(textContainerRef.current, {
+      scale: 8,
+      opacity: 0,
+      filter: "blur(10px)",
+      force3D: true,
+      rotationZ: 0.01,
+      ease: "power2.in",
+      duration: 1,
+    }, 0);
 
-    scrollTl.to(
-      backgroundRef.current,
-      {
-        scale: 0.3,
-        opacity: 0,
-        transformOrigin: "center center",
-        ease: "power2.inOut",
-        duration: 1,
-      },
-      0
-    );
+    scrollTl.to(backgroundRef.current, {
+      scale: 0.3,
+      opacity: 0,
+      transformOrigin: "center center",
+      ease: "power2.inOut",
+      duration: 1,
+    }, 0);
+
+    return () => {
+      titleEl.removeEventListener("mousemove", onMouseMove);
+      titleEl.removeEventListener("mouseleave", onMouseLeave);
+    };
   }, { scope: containerRef });
 
   return (
@@ -85,63 +96,81 @@ const Hero = () => {
     >
       <style>
         {`
+          @keyframes chromeShimmer {
+            to { background-position: 200% center; }
+          }
+
+          .kinetic-chrome-name {
+            background-image: linear-gradient(135deg, #ffffff 0%, #b0b0b0 25%, #050505 50%, #3496F7 75%, #ffffff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: chromeShimmer 8s linear infinite;
+            display: inline-block;
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+            pointer-events: auto !important;
+            margin: 0 auto;
+          }
+
+          /* PREMIUM SUBTITLE ANIMATION */
+          .live-subtitle {
+            background-image: linear-gradient(90deg, #a3a3a3 0%, #ffffff 50%, #a3a3a3 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: chromeShimmer 4s linear infinite; /* Faster than the title */
+            display: inline-block;
+          }
+
           .spline-wrapper {
             width: 100%;
             height: 100%;
-            filter: contrast(1.5) brightness(0.8);
+            filter: contrast(1.2) brightness(0.9);
+            transform: translateZ(0);
           }
           
-          .mobile-break {
-            display: none;
-          }
+          .mobile-break { display: none; }
 
-          /* Animates the little dot inside the scroll indicator */
           @keyframes scrollBounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(6px); }
             60% { transform: translateY(3px); }
           }
 
-          .scroll-dot {
-            animation: scrollBounce 2s infinite;
-          }
+          .scroll-dot { animation: scrollBounce 2s infinite; }
 
           @media (max-width: 768px) {
             .spline-wrapper {
-              transform: scale(0.4); 
-              transform-origin: center center;
-              /* THE FIX: Prevents the 3D model from trapping user's thumb on mobile */
+              /* THE FIX: Scale up and pull UP to prevent cutting and centering */
+              transform: scale(1.0) translateX(3%) translateY(4%); 
+              width: 100vw;
+              height: 100vh;
               pointer-events: none !important; 
             }
             .mobile-break { display: block; }
-            .hero-title { line-height: 1 !important; }
+            .hero-title { 
+                line-height: 1.1 !important; 
+                width: 100% !important;
+            }
           }
         `}
       </style>
 
-      {/* LAYER 1: Cinematic Noise Overlay */}
+      {/* Cinematic Noise Overlay */}
       <div style={{
-        position: 'absolute',
-        top: 0, left: 0, right: 0, bottom: 0,
+        position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
         backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
-        opacity: 0.06,
-        pointerEvents: 'none',
-        zIndex: 2
+        opacity: 0.06, pointerEvents: 'none', zIndex: 2
       }}/>
 
-      {/* LAYER 2: The Spline Background */}
+      {/* Spline Background */}
       <div
         ref={backgroundRef}
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          zIndex: 1, display: "flex", justifyContent: "center", alignItems: "center",
           pointerEvents: "auto", 
         }}
         onWheelCapture={(e) => e.stopPropagation()}
@@ -154,100 +183,61 @@ const Hero = () => {
         </div>
       </div>
       
-      {/* LAYER 3: The Text Container */}
+      {/* Text Container */}
       <div
         ref={textContainerRef}
         style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          zIndex: 10, 
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          pointerEvents: "none", 
-          width: "100%",
+          position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
+          zIndex: 10, display: "flex", flexDirection: "column",
+          justifyContent: "center", alignItems: "center",
+          textAlign: "center",
+          pointerEvents: "none", width: "100%", padding: "0 20px",
           boxSizing: "border-box",
-          padding: "0 24px", 
+          willChange: "transform, opacity, filter" 
         }}
       >
-        {/* The Premium Status Pill */}
-        <div 
-          ref={badgeRef}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '8px 16px',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '50px',
-            backdropFilter: 'blur(10px)',
-            marginBottom: '20px',
-            transform: 'translateY(0)' // Reset for GSAP
-          }}
-        >
-          <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10b981', boxShadow: '0 0 10px #10b981' }} />
-          <span style={{ color: '#d4d4d4', fontSize: '0.8rem', fontWeight: '600', letterSpacing: '1px', textTransform: 'uppercase' }}>
-            Available for Opportunities
-          </span>
-        </div>
-
         <h1
           ref={titleRef}
-          className="hero-title"
+          className="hero-title kinetic-chrome-name"
           style={{
-            fontSize: "clamp(2.5rem, 12vw, 7.5rem)", 
+            fontSize: "clamp(2.5rem, 10vw, 7.5rem)", 
             fontWeight: "900",
             lineHeight: "1.05",
             letterSpacing: "-0.04em",
-            color: "#ffffff",
-            margin: 0,
-            textAlign: "center",
-            width: "100%", 
-            textShadow: "0 20px 40px rgba(0,0,0,0.5)" // Separates text from the 3D sphere
+            margin: "0 auto",
+            width: "fit-content",
+            padding: "10px",
           }}
         >
-          Prateek <br className="mobile-break" /> Shekhawat.
+          Prateek <br className="mobile-break" /> Shekhawat
         </h1>
         
         <p
           ref={subtitleRef}
+          className="live-subtitle"
           style={{
-            fontSize: "clamp(0.85rem, 2vw, 1.2rem)",
-            color: "#a3a3a3",
-            marginTop: "1.5rem",
-            fontWeight: "600",
-            letterSpacing: "0.15em",
+            fontSize: "clamp(0.85rem, 2vw, 1.1rem)",
+            marginTop: "2.5rem", // Pushed lower as requested
+            fontWeight: "700",
+            letterSpacing: "0.25em", // Increased for premium feel
             textAlign: "center",
+            textTransform: "uppercase"
           }}
         >
           FULL STACK MERN DEVELOPER
         </p>
       </div>
 
-      {/* LAYER 4: The Scroll Indicator */}
       <div 
         ref={scrollIndicatorRef}
         style={{
-          position: 'absolute',
-          bottom: '40px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '10px',
-          opacity: 0 // Hidden until GSAP loads it
+          position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)',
+          zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'
         }}
       >
         <span style={{ color: '#555', fontSize: '0.7rem', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>Scroll</span>
         <div style={{ width: '24px', height: '40px', border: '2px solid rgba(255,255,255,0.2)', borderRadius: '20px', display: 'flex', justifyContent: 'center', paddingTop: '6px' }}>
-          <div className="scroll-dot" style={{ width: '4px', height: '8px', backgroundColor: '#ffffff', borderRadius: '4px' }} />
+          <div className="scroll-dot" style={{ width: '4px', height: '8px', backgroundColor: '#3496F7', borderRadius: '4px' }} />
         </div>
       </div>
     </section>

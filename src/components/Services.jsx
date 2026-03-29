@@ -89,11 +89,11 @@ const Services = () => {
                 transition: 'border-color 0.3s ease'
               }}
               // Simple hover effect using inline events for now
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#3496F7'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#222'}
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '15px' }}>
-                <span style={{ color: '#4f46e5', fontSize: 'clamp(1rem, 2vw, 1.5rem)', fontWeight: 'bold' }}>
+                <span style={{ color: '#3496F7', fontSize: 'clamp(1rem, 2vw, 1.5rem)', fontWeight: 'bold' }}>
                   {service.id}
                 </span>
                 <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.5rem)', color: '#ffffff', margin: 0 }}>

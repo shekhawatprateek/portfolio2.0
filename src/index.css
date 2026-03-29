@@ -1,11 +1,116 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* 1. THE OBSIDIAN COLOR VARIABLES */
+:root {
+  --bg-deep: #000000;
+  --bg-elevated: #050505;
+  --text-pure: #ffffff;
+  --text-muted: #a3a3a3;
+  /* Changed from Indigo to your Animation's Blue */
+  --accent-main: #3496F7; 
+}
+
+/* 2. SMOOTH SCROLLING & BASE LAYOUT */
+html {
+  scroll-behavior: smooth;
+  background-color: var(--bg-deep);
+  color: var(--text-pure);
 }
 
 body {
-  background-color: #0a0a0a; /* Dark theme background */
+  margin: 0;
+  padding: 0;
+  /* Satoshi for flawless, highly legible paragraphs */
+  font-family: 'Satoshi', sans-serif; 
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden; /* Prevents horizontal scroll breaking */
+  background-color: var(--bg-deep);
+}
+
+/* 3. THE JAW-DROPPING HEADINGS */
+h1, h2, h3, h4, h5, h6 {
+  /* Clash Display gives that massive, aggressive agency look */
+  font-family: 'Clash Display', sans-serif;
+  margin: 0;
+}
+
+/* 4. THE CUSTOM TEXT SELECTION (When a user highlights text) */
+::selection {
+  background-color: rgba(79, 70, 229, 0.3); /* Transparent Indigo */
   color: #ffffff;
-  overflow-x: hidden; /* Prevents horizontal scrolling bugs */
+}
+::-moz-selection {
+  background-color: rgba(79, 70, 229, 0.3);
+  color: #ffffff;
+}
+
+/* 5. THE STEALTH SCROLLBAR */
+::-webkit-scrollbar {
+  width: 8px; /* Ultra-thin */
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-deep);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a1a1a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-main); /* Lights up indigo when they grab it */
+}
+
+/* Removes blue outline on clicked buttons/links, replaces with glow */
+*:focus {
+  outline: none;
+}
+
+*:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-deep), 0 0 0 4px var(--accent-main);
+  border-radius: 4px;
+}
+
+/* GLOBAL TYPOGRAPHY REFINEMENT for the Name */
+.premium-name {
+  /* Using your high-end Clash Display font, extremely bold */
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 800; 
+  letter-spacing: -0.05em; /* Tighter letter spacing implies luxury design */
+  line-height: 0.9;
+  
+  /* 1. THE OBSIDIAN CHROME TEXTURE (Using complex gradients for liquid look) */
+  background-image: linear-gradient(
+    135deg,
+    #ffffff 0%,   /* Pure highlight */
+    #e0e0e0 25%,  /* Midtone silver */
+    #0a0a0a 50%,  /* Deep black shadow - this creates the chrome depth */
+    #3496F7 75%,  /* Your exact tech blue shimmer */
+    #ffffff 100%  /* Highlight return */
+  );
+  
+  background-size: 200% auto; /* Important for the movement animation */
+  
+  /* 2. THE CHROME MASK (Standard prefix needed for cross-browser) */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* Hides the actual text fill, revealing only the gradient background underneath */
+  -webkit-text-fill-color: transparent;
+  
+  /* 3. MICRO-TEXTURE (Optional but premium: subtle anti-aliasing override) */
+  -webkit-font-smoothing: initial;
+  
+  /* Ensures no jagged edges break the chrome effect */
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.1));
+  
+  transition: all 0.3s ease;
+}
+
+/* 4. THE SHIMMER ANIMATION */
+@keyframes chromeShimmer {
+  to {
+    /* Pans the background gradient across the text */
+    background-position: 200% center;
+  }
 }

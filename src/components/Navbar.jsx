@@ -1,15 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLenis } from 'lenis/react';
 
-// Notice we added 'id' so the observer knows exactly what to look for
+// 1. ADDED PREMIUM COLORS TO EACH SECTION
 const navItems = [
-  // THE FIX: Changed target from '#hero' to 0
-  { name: 'Home', target: 0, id: 'hero' }, 
-  { name: 'Architect', target: '#about', id: 'about' },
-  { name: 'Skills', target: '#skills', id: 'skills' },
-  { name: 'Work', target: '#projects', id: 'projects' },
-  { name: 'Services', target: '#services', id: 'services' },
-  { name: 'Contact', target: '#contact', id: 'contact' }
+  { name: 'Home', target: 0, id: 'hero', color: '#3496F7' },       // Tech Blue
+  { name: 'About', target: '#about', id: 'about', color: '#10b981' },    // Emerald Green
+  { name: 'Skills', target: '#skills', id: 'skills', color: '#f59e0b' }, // Amber/Yellow
+  { name: 'Work', target: '#projects', id: 'projects', color: '#ef4444' },// Cinematic Red
+  { name: 'Contact', target: '#contact', id: 'contact', color: '#8b5cf6' } // Amethyst Purple
 ];
 
 const Navbar = () => {
@@ -18,7 +16,6 @@ const Navbar = () => {
   const navRef = useRef(null);
   const buttonRefs = useRef([]);
 
-  // Smooth scroll to the section when clicked
   const handleScroll = (target) => {
     if (lenis) {
       lenis.scrollTo(target, { 
@@ -28,12 +25,9 @@ const Navbar = () => {
     }
   };
 
-  // 1. OBSERVE THE SCROLL POSITION
   useEffect(() => {
     const observerOptions = {
       root: null,
-      // This creates an invisible line in the exact dead-center of the screen.
-      // Whichever section crosses this line becomes the "active" one.
       rootMargin: '-50% 0px -50% 0px', 
       threshold: 0
     };
@@ -48,7 +42,6 @@ const Navbar = () => {
 
     const observer = new IntersectionObserver(observerCallback, observerOptions);
 
-    // Tell the observer to watch every section on the page
     navItems.forEach((item) => {
       const section = document.getElementById(item.id);
       if (section) observer.observe(section);
@@ -57,7 +50,6 @@ const Navbar = () => {
     return () => observer.disconnect();
   }, []);
 
-  // 2. AUTO-SCROLL THE NAVBAR ON MOBILE
   useEffect(() => {
     const activeIndex = navItems.findIndex(item => item.id === activeSection);
     
@@ -65,7 +57,6 @@ const Navbar = () => {
       const button = buttonRefs.current[activeIndex];
       const nav = navRef.current;
       
-      // Calculate the exact math needed to slide the active button to the center of the pill
       const navWidth = nav.offsetWidth;
       const buttonLeft = button.offsetLeft;
       const buttonWidth = button.offsetWidth;
@@ -95,7 +86,6 @@ const Navbar = () => {
             -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            /* This wrapper keeps the pill shape perfectly intact on mobile */
             overflow: hidden; 
           }
 
@@ -107,10 +97,11 @@ const Navbar = () => {
           
           .nav-btn {
             background: transparent;
-            border: none;
-            color: #777777; /* Darker inactive color for higher contrast */
+            /* Reserve border space so the button doesn't jump when active */
+            border: 1px solid transparent; 
+            color: #777777; 
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
             letter-spacing: 1px;
             text-transform: uppercase;
             padding: 8px 18px;
@@ -118,21 +109,28 @@ const Navbar = () => {
             border-radius: 30px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             white-space: nowrap; 
+            position: relative;
           }
 
           .nav-btn:hover {
             color: #d4d4d4;
           }
 
-          /* THE PREMIUM ACTIVE STATE */
+          /* --- THE PREMIUM COLOR ACTIVE STATE --- */
           .nav-btn.active {
-            color: #ffffff;
-            background-color: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            /* Text matches the specific section color */
+            color: var(--nav-color);
+            
+            /* Border matches the color, but slightly transparent */
+            border-color: color-mix(in srgb, var(--nav-color) 50%, transparent);
+            
+            /* Background tint matches the color */
+            background-color: color-mix(in srgb, var(--nav-color) 10%, transparent);
+            
+            /* Glowing shadow matches the color */
+            box-shadow: 0 4px 20px color-mix(in srgb, var(--nav-color) 25%, transparent);
           }
 
-          /* MOBILE OPTIMIZATION */
           @media (max-width: 768px) {
             .glass-nav-container {
               width: 90vw; 
@@ -144,7 +142,7 @@ const Navbar = () => {
               overflow-x: auto; 
               -ms-overflow-style: none;  
               scrollbar-width: none;  
-              scroll-snap-type: x mandatory; /* Makes swiping feel snapping and premium */
+              scroll-snap-type: x mandatory; 
             }
             
             .glass-nav::-webkit-scrollbar {
@@ -154,7 +152,7 @@ const Navbar = () => {
             .nav-btn {
               font-size: 0.75rem; 
               padding: 8px 16px; 
-              scroll-snap-align: center; /* Ensures the button centers perfectly when swiped */
+              scroll-snap-align: center; 
             }
 
             .glass-nav::after {
@@ -170,11 +168,11 @@ const Navbar = () => {
           {navItems.map((item, index) => (
             <button
               key={index}
-              // Save a reference to each button so we can calculate its position
               ref={(el) => (buttonRefs.current[index] = el)} 
               onClick={() => handleScroll(item.target)}
-              // Dynamically apply the 'active' class if this section is on screen
               className={`nav-btn ${activeSection === item.id ? 'active' : ''}`}
+              // 2. INJECT THE COLOR AS A CSS VARIABLE
+              style={{ '--nav-color': item.color }}
             >
               {item.name}
             </button>

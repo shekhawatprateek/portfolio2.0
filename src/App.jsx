@@ -7,6 +7,8 @@ import About from './components/About'
 import Skills from './components/Skills'
 import Projects from './components/Projects' // Make sure the filename matches!
 import Contact from './components/Contact'
+import AITerminal from './components/AITerminal'
+import PremiumEffects from './components/PremiumEffects';
 import 'lenis/dist/lenis.css'
 
 function App() {
@@ -30,11 +32,13 @@ function App() {
   return (
     <ReactLenis root ref={lenisRef} autoRaf={false} options={{ lerp: 0.1, duration: 1.5 }}>
       <main style={{ position: 'relative' }}>
+        <PremiumEffects /> {/* Drops in the global physics and texture */}
         <Navbar />
         <Hero />
         <About />
         <Skills /> 
         <Projects />
+        <AITerminal />
         <Contact />
       </main>
     </ReactLenis>

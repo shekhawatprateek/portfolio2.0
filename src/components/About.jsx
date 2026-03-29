@@ -5,33 +5,87 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const About = () => {
-  const containerRef = useRef(null);
-  const textRefs = useRef([]);
+const certifications = [
+  {
+    title: "React - The Complete Guide (incl. Next.js, Redux)",
+    issuer: "Udemy",
+    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-42cd11b8-dbb2-48c2-9172-a67d52ac94c4.pdf"
+  },
+  {
+    title: "NodeJS - The Complete Guide (MVC, REST APIs, GraphQL)",
+    issuer: "Udemy",
+    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-4301ec81-2f06-4699-8363-e565b786f070.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-4301ec81-2f06-4699-8363-e565b786f070.pdf"
+  },
+  {
+    title: "The Complete JavaScript Course 2025: Zero to Expert!",
+    issuer: "Udemy",
+    image: "https://udemy-certificate.s3.amazonaws.com/image/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.jpg",
+    pdf: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-71d6d0c3-097e-437e-a363-746f2f5b1c01.pdf"
+  }
+];
+
+// COMPONENT: The Interactive Counting Stat Box
+const AnimatedStat = ({ target, suffix, label, isLast }) => {
+  const numberRef = useRef(null);
+  const boxRef = useRef(null);
 
   useGSAP(() => {
-    // Smooth stagger fade-up for all text elements
-    gsap.fromTo(textRefs.current, 
-      { y: 50, opacity: 0 },
+    const counter = { val: 0 };
+    gsap.fromTo(counter, 
+      { val: 0 }, 
       {
-        y: 0,
-        opacity: 1,
-        duration: 1,
-        stagger: 0.15,
+        val: target,
+        duration: 1.5,
         ease: "power3.out",
         scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top 65%",
+          trigger: boxRef.current,
+          start: "top 95%", 
+          toggleActions: "play none none reverse" 
+        },
+        onUpdate: () => {
+          if (numberRef.current) {
+            numberRef.current.innerText = Math.floor(counter.val) + suffix;
+          }
         }
       }
     );
+  }, []);
+
+  return (
+    <div ref={boxRef} className={`stat-box ${isLast ? 'last-stat' : ''}`}>
+      <span ref={numberRef} className="stat-number" style={{ color: '#3496F7' }}>0{suffix}</span>
+      <span className="stat-label">{label}</span>
+    </div>
+  );
+};
+
+const About = () => {
+  const containerRef = useRef(null);
+  const leftRef = useRef(null);
+  const textRefs = useRef([]);
+  const certRefs = useRef([]);
+
+  useGSAP(() => {
+    gsap.fromTo(leftRef.current,
+      { x: -50, opacity: 0 },
+      { x: 0, opacity: 1, duration: 1.2, ease: "power3.out", scrollTrigger: { trigger: containerRef.current, start: "top 65%" } }
+    );
+
+    gsap.fromTo(textRefs.current, 
+      { y: 40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, stagger: 0.15, ease: "power3.out", scrollTrigger: { trigger: containerRef.current, start: "top 65%" } }
+    );
+
+    gsap.fromTo(certRefs.current,
+      { y: 50, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.8, stagger: 0.2, ease: "power3.out", scrollTrigger: { trigger: ".cert-grid", start: "top 85%" } }
+    );
   }, { scope: containerRef });
 
-  const addToRefs = (el) => {
-    if (el && !textRefs.current.includes(el)) {
-      textRefs.current.push(el);
-    }
-  };
+  const addToRefs = (el) => { if (el && !textRefs.current.includes(el)) textRefs.current.push(el); };
+  const addCertToRefs = (el) => { if (el && !certRefs.current.includes(el)) certRefs.current.push(el); };
 
   return (
     <section 
@@ -42,88 +96,134 @@ const About = () => {
         padding: 'clamp(80px, 10vw, 150px) 20px',
         color: '#ffffff',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        position: 'relative',
+        overflow: 'hidden'
       }}
     >
-      <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', flexWrap: 'wrap', gap: '60px' }}>
-        
-        {/* LEFT COLUMN: The Bold Statement */}
-        <div style={{ flex: '1 1 400px' }}>
-          <h2 
-            ref={addToRefs}
-            style={{ 
-              fontSize: 'clamp(2rem, 4vw, 3rem)', 
-              fontWeight: '900', 
-              lineHeight: '1.2',
-              letterSpacing: '-0.02em',
-              marginBottom: '30px'
-            }}
-          >
-            I am obsessed with making things. <br/>
-            <span style={{ color: '#4f46e5' }}>Even more obsessed with making them perfect.</span>
-          </h2>
-        </div>
-
-        {/* RIGHT COLUMN: The Details */}
-        <div style={{ flex: '1 1 500px', display: 'flex', flexDirection: 'column', gap: '30px' }}>
-          <p ref={addToRefs} style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7' }}>
-            I am a Gurugram-based Full Stack Developer specializing in the MERN stack. After graduating from the University of Delhi, I dove deep into the web development community and never looked back. 
-          </p>
+      <style>
+        {`
+          .about-image-wrapper {
+            position: relative; width: 100%; height: 100%; min-height: 500px; border-radius: 24px;
+            overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); background-color: #050505;
+            display: flex; align-items: center; justify-content: center;
+          }
+          .glass-badge {
+            position: absolute; background-color: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 10px 16px; border-radius: 50px; display: flex; align-items: center;
+            gap: 8px; font-size: 0.75rem; font-weight: 600; color: #e5e5e5; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10;
+          }
+          .badge-top { top: 20px; left: 20px; }
+          .badge-bottom { bottom: 20px; right: 20px; }
+          @keyframes pulse-dot { 0% { box-shadow: 0 0 0 0 rgba(52, 150, 247, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(52, 150, 247, 0); } 100% { box-shadow: 0 0 0 0 rgba(52, 150, 247, 0); } }
+          .status-dot { width: 8px; height: 8px; background-color: #3496F7; border-radius: 50%; animation: pulse-dot 2s infinite; }
           
-          <p ref={addToRefs} style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7' }}>
-            For three years at Techbridge India, I spearheaded the architecture and full-stack development of enterprise systems, owning everything from the MongoDB backend infrastructure to the React and Redux UIs. I don't just write code; I build scalable, high-performance products from the ground up.
-          </p>
+          .micro-stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; margin-bottom: 40px; }
+          .stat-box { 
+            background-color: rgba(255, 255, 255, 0.02); 
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 16px; 
+            padding: 20px 16px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            position: relative;
+            overflow: hidden;
+          }
+          .stat-box::before {
+            content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at top right, rgba(52, 150, 247, 0.1), transparent 60%);
+            opacity: 0; transition: opacity 0.4s ease; pointer-events: none;
+          }
+          .stat-box:hover { background-color: rgba(255, 255, 255, 0.04); border-color: #3496F7; transform: translateY(-4px); }
+          .stat-box:hover::before { opacity: 1; }
+          .stat-number { font-size: 1.8rem; font-weight: 900; line-height: 1; position: relative; z-index: 1; }
+          .stat-label { font-size: 0.7rem; color: #888888; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; position: relative; z-index: 1; }
 
-          {/* Quick Stats Grid */}
-          <div ref={addToRefs} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px', paddingBottom: '30px', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
-            <div>
-              <h4 style={{ fontSize: '2rem', fontWeight: '800', margin: '0 0 5px 0' }}>3+</h4>
-              <p style={{ color: '#888', margin: 0, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Years Experience</p>
-            </div>
-            <div>
-              <h4 style={{ fontSize: '2rem', fontWeight: '800', margin: '0 0 5px 0' }}>80%</h4>
-              <p style={{ color: '#888', margin: 0, fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Core Features Delivered</p>
+          .cert-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+          .cert-card { background-color: #050505; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden; text-decoration: none; display: flex; flex-direction: column; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+          .cert-card:hover { border-color: #3496F7; transform: translateY(-6px); }
+          .cert-image-wrapper { width: 100%; height: 160px; overflow: hidden; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+          .cert-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+          .cert-card:hover .cert-img { transform: scale(1.05); }
+
+          @media (max-width: 900px) {
+            .about-top-row { flex-direction: column; gap: 40px !important; }
+            .about-image-wrapper { min-height: 350px; }
+            .micro-stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .last-stat { grid-column: span 2; align-items: center; text-align: center; }
+            .cert-grid { grid-template-columns: 1fr; } 
+          }
+        `}
+      </style>
+
+      <div style={{ position: 'absolute', top: '0%', right: '-10%', width: '600px', height: '600px', background: 'radial-gradient(circle, rgba(52,150,247,0.03) 0%, rgba(0,0,0,0) 70%)', pointerEvents: 'none', zIndex: 0 }}/>
+
+      <div style={{ width: '100%', maxWidth: '1200px', display: 'flex', flexDirection: 'column', gap: '60px', position: 'relative', zIndex: 1 }}>
+        
+        <div className="about-top-row" style={{ display: 'flex', gap: '60px' }}>
+          {/* LEFT COLUMN */}
+          <div ref={leftRef} style={{ flex: '1 1 45%' }}>
+            <div className="about-image-wrapper">
+              <lottie-player src="/developer.json" background="transparent" speed="1" style={{ width: '80%', height: '80%' }} loop autoplay></lottie-player>
+              <div className="glass-badge badge-top">📍 Gurugram, India</div>
+              <div className="glass-badge badge-bottom"><div className="status-dot"></div>Elite Engineer</div>
             </div>
           </div>
 
-          {/* Resume Download Button */}
-          <a 
-            ref={addToRefs}
-            href="/Resume.pdf" // Ensure your PDF is in the public folder
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              padding: '16px 32px',
-              backgroundColor: '#ffffff',
-              color: '#000000',
-              fontWeight: '700',
-              borderRadius: '50px',
-              textDecoration: 'none',
-              fontSize: '1rem',
-              alignSelf: 'flex-start',
-              marginTop: '10px',
-              transition: 'all 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 10px 30px rgba(255, 255, 255, 0.15)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            Download Resume
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-              <polyline points="7 10 12 15 17 10"></polyline>
-              <line x1="12" y1="15" x2="12" y2="3"></line>
-            </svg>
-          </a>
+          {/* RIGHT COLUMN */}
+          <div style={{ flex: '1 1 55%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <h2 ref={addToRefs} style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: '900', lineHeight: '1.1', letterSpacing: '-0.02em', marginBottom: '20px', color: '#ffffff' }}>
+              YOUR SEARCH IS <span style={{ color: '#3496F7' }}>OVER.</span>
+            </h2>
 
+            <div ref={addToRefs} style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
+              <p style={{ fontSize: '1.2rem', color: '#e5e5e5', lineHeight: '1.6', fontWeight: '700' }}>
+                I don't just ship features; I engineer systems.
+              </p>
+              <p style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7', fontWeight: '500' }}>
+                With over 3 years of deep-immersion experience in the MERN ecosystem, I specialize in transforming complex business logic into high-velocity, production-grade software. 
+              </p>
+              <p style={{ fontSize: '1.1rem', color: '#a3a3a3', lineHeight: '1.7', fontWeight: '500' }}>
+                From architecting distributed Node.js backends to crafting pixel-perfect interfaces, I bridge the gap between heavy-duty engineering and seamless user experience. No technical debt. No hand-holding. Just scalable, battle-tested code.
+              </p>
+            </div>
+
+            <div ref={addToRefs} className="micro-stats-grid">
+              <AnimatedStat target={3} suffix="+" label="Years MERN" />
+              <AnimatedStat target={3} suffix="" label="Certifications" />
+              <AnimatedStat target={100} suffix="%" label="Ownership" isLast={true} />
+            </div>
+
+            <a ref={addToRefs} href="/resume.pdf" target="_blank" rel="noopener noreferrer" 
+               style={{ display: 'inline-flex', alignItems: 'center', gap: '12px', padding: '16px 36px', backgroundColor: '#ffffff', color: '#000000', fontWeight: '800', borderRadius: '50px', textDecoration: 'none', fontSize: '1rem', alignSelf: 'flex-start' }}>
+              View Full Resume
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </a>
+          </div>
+        </div>
+
+        {/* CERTIFICATIONS */}
+        <div style={{ width: '100%' }}>
+          <h3 ref={addCertToRefs} style={{ fontSize: '1rem', fontWeight: '800', color: '#ffffff', marginBottom: '25px', letterSpacing: '1px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3496F7" strokeWidth="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            Verified Credentials
+          </h3>
+          
+          <div className="cert-grid">
+            {certifications.map((cert, index) => (
+              <a key={index} ref={addCertToRefs} href={cert.pdf} target="_blank" rel="noopener noreferrer" className="cert-card">
+                <div className="cert-image-wrapper">
+                  <img src={cert.image} alt={cert.title} className="cert-img" loading="lazy" />
+                </div>
+                <div className="cert-content" style={{ padding: '20px' }}>
+                  <span style={{ color: '#3496F7', fontSize: '0.75rem', fontWeight: '700' }}>{cert.issuer}</span>
+                  <h4 style={{ color: '#ffffff', fontSize: '0.95rem', fontWeight: '700', marginTop: '5px' }}>{cert.title}</h4>
+                </div>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>

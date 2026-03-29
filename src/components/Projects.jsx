@@ -5,49 +5,42 @@ import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// YOUR ACTUAL PROJECTS, ELEVATED.
 const projects = [
   {
     title: "RideFlow",
     category: "Ride Booking Platform",
-    description: "A full-stack application featuring real-time location tracking via Google Maps API and live driver-user communication using Socket.io. State managed with React Context API and backed by a robust Node/Express RESTful infrastructure.",
+    description: "Engineering a high-concurrency ride-hailing system. Integrated real-time geospatial tracking via Google Maps API and low-latency driver-rider synchronization with Socket.io.",
     tech: ["React.js", "Node.js", "Socket.io", "MongoDB"],
     year: "2024",
-    theme: "#050505", 
-    link: "https://github.com/shekhawatprateek", // Update with your actual live link
+    accent: "#10b981", // Emerald Green
+    image: "https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=1000&auto=format&fit=crop", 
+    link: "https://github.com/shekhawatprateek", 
     linkType: "View Live Demo"
-  },
-  {
-    title: "ChatCord",
-    category: "Real-Time Infrastructure",
-    description: "A bidirectional websocket architecture supporting concurrent connections for live chat environments. Engineered for low-latency communication and instant data delivery.",
-    tech: ["Node.js", "Socket.io", "Express", "WebSockets"],
-    year: "2023",
-    theme: "#0a0a0a",
-    link: "https://github.com/shekhawatprateek/ChatCord",
-    linkType: "View Repository"
   },
   {
     title: "Netflix Architecture",
     category: "Streaming UI / UX",
-    description: "High-fidelity frontend clone of Netflix's interface. Features dynamic asynchronous data fetching from TMDB, responsive media carousels, and complex state management.",
-    tech: ["React.js", "REST APIs", "Dynamic Routing"],
+    description: "Architecting a high-fidelity streaming interface. Optimized for asynchronous data fetching and complex state management across thousands of dynamic media assets.",
+    tech: ["React.js", "REST APIs", "Redux"],
     year: "2023",
-    theme: "#111111", 
+    accent: "#ef4444", // Cinematic Red
+    image: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=1000&auto=format&fit=crop", 
     link: "https://shekhawatprateek.github.io/NetflixClone/",
     linkType: "View Live Demo"
   },
   {
-    title: "NodeKB CMS",
-    category: "Content Management",
-    description: "A full-stack knowledge base application featuring secure user registration, session authentication, and persistent CRUD operations for article management.",
-    tech: ["Node.js", "Express", "MongoDB"],
-    year: "2022",
-    theme: "#161616", 
-    link: "https://github.com/shekhawatprateek/nodekb",
-    linkType: "View Repository"
+    title: "ClickServe",
+    category: "Frontend Application",
+    description: "A foundational build demonstrating early mastery of responsive design and CI/CD pipelines. Deployed with focus on load-time performance and cross-browser stability.",
+    tech: ["JavaScript", "HTML5", "CSS3", "Netlify"],
+    year: "2021",
+    accent: "#3496F7", // Tech Blue
+    image: "./clickserve.png", 
+    link: "https://clickserve.netlify.app/", 
+    linkType: "View Live Demo"
   }
 ];
+
 const Work = () => {
   const containerRef = useRef(null);
 
@@ -58,14 +51,12 @@ const Work = () => {
       if (index === cards.length - 1) return;
 
       gsap.to(card, {
-        scale: 0.9,
-        opacity: 0.3,
-        filter: "blur(5px)",
+        scale: 0.9, 
+        opacity: 0,
         scrollTrigger: {
-          trigger: card,
-          start: "top 15%", 
-          endTrigger: cards[index + 1], 
-          end: "top 15%",
+          trigger: cards[index + 1], 
+          start: "top 85%", 
+          end: "top 20%",
           scrub: true,
         }
       });
@@ -78,159 +69,246 @@ const Work = () => {
       ref={containerRef}
       style={{
         backgroundColor: '#000000',
-        padding: 'clamp(80px, 10vw, 150px) 20px',
-        paddingBottom: '30vh' 
+        padding: 'clamp(60px, 10vw, 120px) 0',
+        paddingBottom: '20vh',
+        overflow: 'hidden'
       }}
     >
       <style>
         {`
           .project-card {
             position: sticky;
-            top: 15%; 
-            width: 100%;
+            top: 12%; 
+            width: 92%;
             max-width: 1100px;
-            height: 70vh;
-            min-height: 520px;
-            margin: 0 auto 5vh auto;
+            height: auto;
+            min-height: 550px;
+            margin: 0 auto 12vh auto;
             border-radius: 32px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: #080808;
+            border: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             overflow: hidden;
-            box-shadow: 0 -20px 40px rgba(0,0,0,0.8);
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.9);
             transform-origin: top center; 
+            box-sizing: border-box;
           }
 
-          .card-content {
+          .card-content-left {
+            flex: 1.2;
             padding: clamp(30px, 5vw, 60px);
             display: flex;
             flex-direction: column;
-            height: 100%;
-            z-index: 2;
+            justify-content: center;
+            box-sizing: border-box;
           }
 
+          .card-visual-right {
+            flex: 1;
+            position: relative;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .mockup-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.8s ease;
+          }
+
+          .project-card:hover .mockup-image {
+            transform: scale(1.05);
+          }
+
+          /* --- UPGRADED DESCRIPTION TYPOGRAPHY --- */
+          .project-desc {
+            font-family: 'Satoshi', sans-serif;
+            font-size: 1.15rem;
+            line-height: 1.75;
+            color: #c2c2c2; /* Crisp Silver */
+            font-weight: 500; /* Just enough weight to look sharp */
+            margin-bottom: 35px;
+            letter-spacing: 0.02em; /* Editorial tracking */
+          }
+
+          /* --- UPGRADED PREMIUM TECH TAGS --- */
           .tech-tag {
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            position: relative;
             padding: 8px 16px;
             border-radius: 50px;
             font-size: 0.85rem;
-            color: #a3a3a3;
-            letter-spacing: 0.5px;
-            background-color: rgba(255, 255, 255, 0.02);
+            font-weight: 700;
+            color: var(--accent-color);
+            background-color: rgba(10, 10, 10, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
+            backdrop-filter: blur(10px);
+            cursor: default;
           }
 
-          /* THE PREMIUM LINK BUTTON */
+          .tech-tag::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: var(--accent-color);
+            opacity: 0.08;
+            z-index: -1;
+            transition: opacity 0.3s ease;
+          }
+
+          .tech-tag:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-3px);
+            color: #ffffff;
+          }
+
+          .tech-tag:hover::before {
+            opacity: 0.8; 
+          }
+
           .project-link-btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
+            justify-content: center;
             gap: 12px;
-            margin-top: auto;
-            align-self: flex-start;
-            padding: 14px 28px;
+            margin-top: 32px;
+            padding: 18px 32px;
             background-color: #ffffff;
             color: #000000;
-            font-weight: 700;
+            font-weight: 900;
             border-radius: 50px;
             text-decoration: none;
-            font-size: 0.95rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 1rem;
+            width: fit-content;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            font-family: 'Satoshi', sans-serif;
           }
 
           .project-link-btn:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
-            background-color: #f0f0f0;
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
           }
 
-          .arrow-icon {
-            transition: transform 0.3s ease;
-          }
-
-          .project-link-btn:hover .arrow-icon {
-            transform: translateX(4px) rotate(-45deg);
-          }
-
-          @media (max-width: 768px) {
+          /* MOBILE FIXES */
+          @media (max-width: 850px) {
             .project-card {
-              height: 65vh;
-              top: 12%; 
+              flex-direction: column; 
+              width: 90%;
+              min-height: auto;
+              top: 8%;
             }
-            .project-link-btn {
-              padding: 12px 24px;
+
+            .card-visual-right {
+              height: 220px;
+              flex: none;
               width: 100%;
-              justify-content: center;
+            }
+
+            .card-content-left {
+              padding: 32px 24px;
+              width: 100%;
+              flex: none;
+              box-sizing: border-box;
+            }
+
+            .project-card h3 { 
+                font-size: 2.2rem !important; 
+                margin-bottom: 12px !important;
+            }
+            
+            .project-desc {
+                font-size: 1.05rem !important;
+                margin-bottom: 25px !important;
+            }
+
+            .project-link-btn {
+              width: 100%; 
+              margin-top: 24px;
+            }
+
+            .tech-tag {
+                font-size: 0.75rem !important;
+                padding: 6px 12px !important;
             }
           }
         `}
       </style>
 
-      <div style={{ width: '100%', maxWidth: '1100px', margin: '0 auto' }}>
+      <div style={{ width: '100%', maxWidth: '1200px', margin: '0 auto' }}>
         <h2 style={{ 
           fontSize: 'clamp(2.5rem, 6vw, 4rem)', 
           color: '#ffffff', 
           fontWeight: '900',
-          marginBottom: 'clamp(60px, 8vw, 100px)',
-          letterSpacing: '-0.02em',
-          textAlign: 'center'
+          marginBottom: '80px',
+          textAlign: 'center',
+          fontFamily: 'Clash Display',
+          letterSpacing: '-0.02em'
         }}>
-          SELECTED WORKS.
+          SELECTED <span style={{ color: '#3496F7' }}>WORKS.</span>
         </h2>
 
-        <div className="cards-container" style={{ position: 'relative' }}>
+        <div className="cards-container">
           {projects.map((project, index) => (
             <div 
               key={index} 
               className="project-card"
-              style={{ backgroundColor: project.theme }}
+              style={{ '--accent-color': project.accent }}
             >
-              <div style={{
-                position: 'absolute',
-                top: 0, left: 0, right: 0, bottom: 0,
-                backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
-                opacity: 0.04,
-                pointerEvents: 'none',
-                zIndex: 1
-              }}/>
+              {/* IMAGE SECTION */}
+              <div className="card-visual-right">
+                <img src={project.image} alt={project.title} className="mockup-image" />
+                <div style={{
+                    position: 'absolute', bottom: 0, left: 0, right: 0, height: '40%',
+                    background: `linear-gradient(to top, #080808, transparent)`,
+                    zIndex: 1
+                }}/>
+              </div>
 
-              <div className="card-content">
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
-                  <span style={{ color: '#888', fontWeight: '600', letterSpacing: '2px', textTransform: 'uppercase', fontSize: '0.85rem' }}>
+              {/* CONTENT SECTION */}
+              <div className="card-content-left">
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px', alignItems: 'center' }}>
+                  <span style={{ color: project.accent, fontWeight: '800', fontSize: '0.8rem', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
                     {project.category}
                   </span>
-                  <span style={{ color: '#4f46e5', fontWeight: '700', fontFamily: 'monospace', fontSize: '1.2rem' }}>
+                  <span style={{ color: '#444', fontWeight: '900', fontSize: '1rem', fontFamily: 'monospace' }}>
                     {project.year}
                   </span>
                 </div>
 
-                <h3 style={{ color: '#ffffff', fontSize: 'clamp(2.2rem, 5vw, 3.5rem)', fontWeight: '800', marginBottom: '20px', lineHeight: '1' }}>
-                  {project.title}
+                <h3 style={{ color: '#ffffff', fontSize: '3rem', fontWeight: '900', marginBottom: '20px', lineHeight: '1', letterSpacing: '-0.03em', fontFamily: 'Clash Display' }}>
+                    {project.title}
                 </h3>
                 
-                <p style={{ color: '#a3a3a3', fontSize: 'clamp(1rem, 2vw, 1.1rem)', lineHeight: '1.6', maxWidth: '650px', marginBottom: '40px' }}>
-                  {project.description}
+                {/* UPGRADED DESCRIPTION */}
+                <p className="project-desc">
+                    {project.description}
                 </p>
 
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '40px' }}>
-                  {project.tech.map((techItem, i) => (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                  {project.tech.map((t, i) => (
                     <span key={i} className="tech-tag">
-                      {techItem}
+                        {t}
                     </span>
                   ))}
                 </div>
 
-                {/* THE INTERACTIVE LINK BUTTON */}
                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="project-link-btn">
-                  {project.linkType}
-                  <svg 
-                    className="arrow-icon"
-                    width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
-                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
-                  >
+                  <span>{project.linkType}</span>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" style={{ flexShrink: 0 }}>
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>
                 </a>
-
               </div>
             </div>
           ))}
