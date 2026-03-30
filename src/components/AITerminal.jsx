@@ -106,6 +106,15 @@ const AITerminal = () => {
     setMessages((prev) => [...prev, { role: "user", text: userMsg }]);
     setIsTyping(true);
 
+    // --- THE TRACKING HOOK ---
+    // This sends a custom event to your Google Analytics dashboard
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "cadbury_prompt_sent", {
+        event_category: "AI_Interaction",
+        event_label: "User asked Cadbury a question",
+      });
+    }
+
     try {
       // THE FIX: Pointing the fetch call to your live Render backend
       const response = await fetch(`${BACKEND_URL}/ask-prateek-ai`, {
