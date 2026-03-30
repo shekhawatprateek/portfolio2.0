@@ -52,7 +52,9 @@ const AITerminal = () => {
   const [isTyping, setIsTyping] = useState(false);
 
   // Set the live backend URL here
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "https://portfolio-backend-xbtz.onrender.com";
+  const BACKEND_URL =
+    import.meta.env.VITE_BACKEND_URL ||
+    "https://portfolio-backend-xbtz.onrender.com";
 
   useGSAP(
     () => {
@@ -127,6 +129,7 @@ const AITerminal = () => {
 
   return (
     <section
+      id="cadbury"
       style={{
         backgroundColor: "#000000",
         padding: "clamp(40px, 8vw, 100px) 20px",

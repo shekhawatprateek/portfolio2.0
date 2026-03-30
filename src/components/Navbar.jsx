@@ -4,6 +4,7 @@ import { useLenis } from 'lenis/react';
 // 1. ADDED PREMIUM COLORS TO EACH SECTION
 const navItems = [
   { name: 'Home', target: 0, id: 'hero', color: '#3496F7' },       // Tech Blue
+  { name: 'Cadbury', target: '#cadbury', id: 'cadbury', color: '#3b34f7' },       // Tech Blue
   { name: 'About', target: '#about', id: 'about', color: '#10b981' },    // Emerald Green
   { name: 'Skills', target: '#skills', id: 'skills', color: '#f59e0b' }, // Amber/Yellow
   { name: 'Work', target: '#projects', id: 'projects', color: '#ef4444' },// Cinematic Red
