@@ -14,12 +14,13 @@ const Hero = () => {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const scrollIndicatorRef = useRef(null);
+  const socialsRef = useRef(null);
 
   useGSAP(() => {
     const loadTl = gsap.timeline();
     
     loadTl.fromTo(
-      [titleRef.current, subtitleRef.current, scrollIndicatorRef.current],
+      [titleRef.current, subtitleRef.current, socialsRef.current, scrollIndicatorRef.current],
       { y: 40, opacity: 0, filter: "blur(10px)" },
       {
         y: 0,
@@ -113,14 +114,13 @@ const Hero = () => {
             margin: 0 auto;
           }
 
-          /* PREMIUM SUBTITLE ANIMATION */
           .live-subtitle {
             background-image: linear-gradient(90deg, #a3a3a3 0%, #ffffff 50%, #a3a3a3 100%);
             background-size: 200% auto;
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: chromeShimmer 4s linear infinite; /* Faster than the title */
+            animation: chromeShimmer 4s linear infinite; 
             display: inline-block;
           }
 
@@ -129,6 +129,29 @@ const Hero = () => {
             height: 100%;
             filter: contrast(1.2) brightness(0.9);
             transform: translateZ(0);
+          }
+
+          .hero-social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(52, 150, 247, 0.7); 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            pointer-events: auto; 
+          }
+          
+          .hero-social-btn:hover {
+            background-color: rgba(52, 150, 247, 0.1);
+            border-color: #3496F7;
+            color: #ffffff;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
           }
           
           .mobile-break { display: none; }
@@ -143,7 +166,6 @@ const Hero = () => {
 
           @media (max-width: 768px) {
             .spline-wrapper {
-              /* THE FIX: Scale up and pull UP to prevent cutting and centering */
               transform: scale(1.0) translateX(3%) translateY(4%); 
               width: 100vw;
               height: 100vh;
@@ -154,18 +176,20 @@ const Hero = () => {
                 line-height: 1.1 !important; 
                 width: 100% !important;
             }
+            .hero-social-btn {
+              width: 38px;
+              height: 38px;
+            }
           }
         `}
       </style>
 
-      {/* Cinematic Noise Overlay */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
         backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")',
         opacity: 0.06, pointerEvents: 'none', zIndex: 2
       }}/>
 
-      {/* Spline Background */}
       <div
         ref={backgroundRef}
         style={{
@@ -183,7 +207,6 @@ const Hero = () => {
         </div>
       </div>
       
-      {/* Text Container */}
       <div
         ref={textContainerRef}
         style={{
@@ -217,9 +240,9 @@ const Hero = () => {
           className="live-subtitle"
           style={{
             fontSize: "clamp(0.85rem, 2vw, 1.1rem)",
-            marginTop: "2.5rem", // Pushed lower as requested
+            marginTop: "2.5rem", 
             fontWeight: "700",
-            letterSpacing: "0.25em", // Increased for premium feel
+            letterSpacing: "0.25em", 
             textAlign: "center",
             textTransform: "uppercase",
             color: "#ffffff"
@@ -229,6 +252,47 @@ const Hero = () => {
         </p>
       </div>
 
+      {/* THE FIX: Centered exactly above the scroll indicator */}
+      <div 
+        ref={socialsRef}
+        style={{
+          position: 'absolute', 
+          bottom: '120px', 
+          left: '50%', 
+          transform: 'translateX(-50%)',
+          display: 'flex', 
+          gap: '16px', 
+          zIndex: 20,
+          pointerEvents: 'auto' 
+        }}
+      >
+        <a 
+          href="https://github.com/shekhawatprateek" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="hero-social-btn"
+          aria-label="GitHub"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+        </a>
+        <a 
+          href="https://linkedin.com/in/prateekshekhawat" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="hero-social-btn"
+          aria-label="LinkedIn"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+            <rect x="2" y="9" width="4" height="12"></rect>
+            <circle cx="4" cy="4" r="2"></circle>
+          </svg>
+        </a>
+      </div>
+
+      {/* Scroll Indicator */}
       <div 
         ref={scrollIndicatorRef}
         style={{
@@ -236,7 +300,7 @@ const Hero = () => {
           zIndex: 10, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px'
         }}
       >
-        <span style={{ color: '#555', fontSize: '0.7rem', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>Scroll</span>
+        <span style={{ color: '#555', fontSize: '0.5rem', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase' }}>Scroll</span>
         <div style={{ width: '24px', height: '40px', border: '2px solid rgba(255,255,255,0.2)', borderRadius: '20px', display: 'flex', justifyContent: 'center', paddingTop: '6px' }}>
           <div className="scroll-dot" style={{ width: '4px', height: '8px', backgroundColor: '#3496F7', borderRadius: '4px' }} />
         </div>
